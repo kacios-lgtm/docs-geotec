@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#185FA5">
+<title>Documentos Geotec - MEL Sondajes</title>
+<style>
+:root{
+  --primario:#185FA5;
+  --primario-osc:#0C447C;
+  --primario-cl:#E6F1FB;
+  --texto:#1F2937;
+  --texto-suave:#6B7280;
+  --borde:#E5E7EB;
+  --fondo:#F9FAFB;
+  --blanco:#FFFFFF;
+  --warn:#D97706;
+  --error:#A32D2D;
+  --exito:#639922;
+  --shadow:0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md:0 4px 6px rgba(0,0,0,0.07), 0 2px 4px rgba(0,0,0,0.05);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:var(--fondo);color:var(--texto);
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+
+/* HEADER */
+.header{
+  background:var(--primario);
+  color:var(--blanco);
+  padding:14px 16px;
+  position:sticky;top:0;z-index:100;
+  box-shadow:var(--shadow-md);
+  display:flex;align-items:center;gap:12px;
+}
+.btn-back{
+  background:transparent;border:none;color:white;
+  font-size:24px;cursor:pointer;padding:4px 8px;
+  display:none;
+}
+.btn-back.visible{display:block}
+.header h1{font-size:17px;font-weight:600;flex:1;line-height:1.2}
+.header-sub{font-size:11px;opacity:0.85;font-weight:400}
+
+/* BUSCADOR */
+.search-bar{
+  padding:12px 16px;
+  background:var(--blanco);
+  border-bottom:1px solid var(--borde);
+  position:sticky;top:54px;z-index:99;
+}
+.search-input{
+  width:100%;padding:11px 14px 11px 40px;
+  background:var(--fondo);
+  border:1px solid var(--borde);
+  border-radius:10px;
+  font-size:15px;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' fill='%236B7280' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:13px center;background-size:18px;
+}
+.search-input:focus{outline:none;border-color:var(--primario);background-color:white}
+
+/* CONTENEDOR PRINCIPAL */
+.contenedor{padding:16px;max-width:900px;margin:0 auto}
+
+/* CATEGORÍAS - HOME */
+.bienvenida{
+  text-align:center;
+  padding:8px 16px 20px;
+  color:var(--texto-suave);
+  font-size:13px;
+  line-height:1.5;
+}
+.categoria-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:12px;
+}
+@media(min-width:600px){.categoria-grid{grid-template-columns:repeat(3,1fr)}}
+@media(min-width:900px){.categoria-grid{grid-template-columns:repeat(4,1fr)}}
+
+.categoria-card{
+  background:var(--blanco);
+  border:1px solid var(--borde);
+  border-radius:12px;
+  padding:16px 14px;
+  cursor:pointer;
+  transition:all 0.18s ease;
+  text-align:center;
+  position:relative;
+  box-shadow:var(--shadow);
+}
+.categoria-card:active{transform:scale(0.97)}
+.categoria-card:hover{box-shadow:var(--shadow-md);border-color:var(--primario)}
+.cat-icono{
+  width:54px;height:54px;border-radius:14px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:700;
+  margin:0 auto 10px;color:white;
+  letter-spacing:-0.5px;
+}
+.cat-icono.color-orange{background:#F59E0B}
+.cat-icono.color-red{background:#DC2626}
+.cat-icono.color-blue{background:#185FA5}
+.cat-icono.color-cyan{background:#0891B2}
+.cat-icono.color-green{background:#16A34A}
+.cat-icono.color-amber{background:#D97706}
+.cat-icono.color-purple{background:#9333EA}
+.cat-icono.color-teal{background:#0D9488}
+
+.cat-nombre{font-size:13px;font-weight:600;color:var(--texto);line-height:1.25;min-height:32px}
+.cat-cantidad{
+  margin-top:8px;font-size:11px;color:var(--texto-suave);
+  background:var(--primario-cl);color:var(--primario-osc);
+  padding:3px 8px;border-radius:10px;display:inline-block;font-weight:600;
+}
+
+/* SUBCATEGORÍAS */
+.subcat-bar{
+  display:flex;gap:8px;
+  overflow-x:auto;
+  padding:6px 16px 14px;
+  background:var(--blanco);
+  border-bottom:1px solid var(--borde);
+  scrollbar-width:none;
+}
+.subcat-bar::-webkit-scrollbar{display:none}
+.subcat-chip{
+  flex-shrink:0;padding:8px 14px;
+  border:1px solid var(--borde);
+  border-radius:18px;
+  font-size:12px;font-weight:500;cursor:pointer;
+  background:var(--blanco);color:var(--texto);
+  transition:all 0.15s ease;white-space:nowrap;
+}
+.subcat-chip.activo{background:var(--primario);color:white;border-color:var(--primario)}
+.subcat-chip:hover:not(.activo){background:var(--primario-cl);border-color:var(--primario)}
+
+/* BUSCADOR INTERNO DE PERSONAS (solo en certificados) */
+.search-persona{
+  padding:10px 16px;
+  background:var(--blanco);
+  border-bottom:1px solid var(--borde);
+}
+.search-persona input{
+  width:100%;padding:9px 12px 9px 36px;
+  background:var(--fondo);
+  border:1px solid var(--borde);
+  border-radius:8px;font-size:13px;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='15' height='15' fill='%236B7280' viewBox='0 0 16 16'%3E%3Cpath d='M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:11px center;background-size:15px;
+}
+.search-persona input:focus{outline:none;border-color:var(--primario);background-color:white}
+
+/* AGRUPACIÓN POR PERSONA en certificados */
+.persona-grupo{
+  margin-bottom:14px;
+}
+.persona-header{
+  font-size:12px;font-weight:600;color:var(--texto-suave);
+  padding:6px 10px;margin-bottom:6px;
+  background:var(--primario-cl);color:var(--primario-osc);
+  border-radius:6px;display:inline-block;
+}
+
+/* DOCUMENTOS */
+.doc-info{
+  padding:8px 4px 12px;
+  font-size:12px;color:var(--texto-suave);
+}
+.doc-info strong{color:var(--texto)}
+
+.doc-lista{display:flex;flex-direction:column;gap:8px}
+.doc-item{
+  background:var(--blanco);
+  border:1px solid var(--borde);
+  border-radius:10px;
+  padding:13px 14px;
+  cursor:pointer;
+  display:flex;align-items:center;gap:12px;
+  transition:all 0.15s ease;
+  text-decoration:none;color:inherit;
+}
+.doc-item:active{transform:scale(0.99)}
+.doc-item:hover{border-color:var(--primario);background:var(--primario-cl)}
+.doc-icono-pdf{
+  flex-shrink:0;width:42px;height:42px;border-radius:8px;
+  background:#FEE2E2;color:#DC2626;
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:700;
+}
+.doc-info-bloque{flex:1;min-width:0}
+.doc-nombre{
+  font-size:13.5px;font-weight:500;color:var(--texto);
+  line-height:1.35;overflow:hidden;text-overflow:ellipsis;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;
+}
+.doc-meta{
+  font-size:11px;color:var(--texto-suave);
+  margin-top:4px;display:flex;gap:8px;flex-wrap:wrap;
+}
+.doc-codigo{
+  font-family:Menlo,Monaco,monospace;font-size:10.5px;
+  background:var(--primario-cl);color:var(--primario-osc);
+  padding:2px 6px;border-radius:4px;font-weight:600;
+}
+.doc-tag-dup{
+  background:#FEE2E2;color:#A32D2D;font-size:10px;font-weight:600;
+  padding:2px 6px;border-radius:4px;
+}
+.chevron{color:var(--texto-suave);font-size:20px;flex-shrink:0}
+
+/* ESTADOS VACÍOS */
+.empty{
+  text-align:center;padding:40px 20px;color:var(--texto-suave);
+}
+.empty-icon{font-size:38px;margin-bottom:10px;opacity:0.5}
+
+/* PANTALLAS */
+.pantalla{display:none}
+.pantalla.activa{display:block}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <button class="btn-back" id="btnBack" onclick="volver()">←</button>
+  <div style="flex:1">
+    <h1 id="titulo">Documentos Geotec</h1>
+    <div class="header-sub" id="subtitulo">MEL Sondajes</div>
+  </div>
+</div>
+
+<div class="search-bar">
+  <input type="text" class="search-input" id="buscador"
+         placeholder="Buscar por código, nombre, palabra clave..."
+         oninput="buscar(this.value)">
+</div>
+
+<div class="pantalla activa" id="scrHome">
+  <div class="contenedor">
+    <div class="bienvenida" id="bienvenida"></div>
+    <div class="categoria-grid" id="gridCategorias"></div>
+  </div>
+</div>
+
+<div class="pantalla" id="scrLista">
+  <div class="subcat-bar" id="subcatBar"></div>
+  <div class="search-persona" id="searchPersona" style="display:none">
+    <input type="text" id="inputPersona" placeholder="Buscar por nombre de trabajador..."
+           oninput="filtrarPorPersona(this.value)">
+  </div>
+  <div class="contenedor">
+    <div class="doc-info" id="docInfo"></div>
+    <div class="doc-lista" id="docLista"></div>
+  </div>
+</div>
+
+<div class="pantalla" id="scrBusqueda">
+  <div class="contenedor">
+    <div class="doc-info" id="busqInfo"></div>
+    <div class="doc-lista" id="busqLista"></div>
+  </div>
+</div>
+
+<script>
+let DATA = null;
+let categoriaActual = null;
+let modoActual = 'home';
+let filtroEquipoActual = null;  // equipo seleccionado (chip) en certificados
+let filtroPersonaActual = '';   // texto del buscador de persona
+
+async function init(){
+  try{
+    const resp = await fetch('catalogo.json');
+    DATA = await resp.json();
+    renderHome();
+  }catch(err){
+    document.getElementById('gridCategorias').innerHTML = `
+      <div class="empty" style="grid-column:1/-1">
+        <div class="empty-icon">⚠</div>
+        <p>No se pudo cargar el catálogo.</p>
+        <p style="font-size:11px;margin-top:6px">${err.message}</p>
+      </div>`;
+  }
+}
+
+function renderHome(){
+  modoActual = 'home';
+  cambiarPantalla('scrHome');
+  document.getElementById('btnBack').classList.remove('visible');
+  document.getElementById('titulo').textContent = 'Documentos Geotec';
+  document.getElementById('subtitulo').textContent = `${DATA.faena} · ${DATA.total_documentos} documentos`;
+  document.getElementById('buscador').value = '';
+
+  document.getElementById('bienvenida').innerHTML = `
+    Selecciona una categoría para ver los documentos disponibles.<br>
+    También puedes usar el buscador para encontrar un documento específico.`;
+
+  const grid = document.getElementById('gridCategorias');
+  grid.innerHTML = DATA.categorias.map(cat => `
+    <div class="categoria-card" onclick="abrirCategoria('${cat.codigo}')">
+      <div class="cat-icono color-${cat.color}">${cat.icono}</div>
+      <div class="cat-nombre">${cat.nombre}</div>
+      <div class="cat-cantidad">${cat.total_documentos} doc${cat.total_documentos!==1?'s':''}</div>
+    </div>
+  `).join('');
+}
+
+function abrirCategoria(codigo){
+  categoriaActual = DATA.categorias.find(c => c.codigo === codigo);
+  if(!categoriaActual) return;
+  modoActual = 'categoria';
+  filtroEquipoActual = null;
+  filtroPersonaActual = '';
+  cambiarPantalla('scrLista');
+  document.getElementById('btnBack').classList.add('visible');
+  document.getElementById('titulo').textContent = categoriaActual.nombre;
+  document.getElementById('subtitulo').textContent = categoriaActual.descripcion;
+
+  // Mostrar buscador de persona SOLO en certificados de competencias
+  const esCertCompetencias = (codigo === '04-CERTIFICADOS-COMPETENCIAS');
+  const searchPersona = document.getElementById('searchPersona');
+  const inputPersona = document.getElementById('inputPersona');
+  inputPersona.value = '';
+  searchPersona.style.display = esCertCompetencias ? 'block' : 'none';
+
+  // Chips: para certificados son EQUIPOS, para el resto SUBCATEGORÍAS
+  const bar = document.getElementById('subcatBar');
+  if(categoriaActual.subcategorias.length > 1){
+    bar.style.display = 'flex';
+    const totalLabel = esCertCompetencias ? 'Todos los equipos' : 'Todos';
+    bar.innerHTML = `
+      <div class="subcat-chip activo" onclick="filtrarEquipo(null, this)">${totalLabel} (${categoriaActual.total_documentos})</div>
+      ${categoriaActual.subcategorias.map(s => {
+        const n = categoriaActual.documentos.filter(d => {
+          return esCertCompetencias ? d.equipo === s : d.subcategoria === s;
+        }).length;
+        return `<div class="subcat-chip" onclick="filtrarEquipo('${escapeAttr(s)}', this)">${escapeHtml(s)} (${n})</div>`;
+      }).join('')}
+    `;
+  } else {
+    bar.style.display = 'none';
+  }
+
+  aplicarFiltros();
+}
+
+function filtrarEquipo(valor, elem){
+  filtroEquipoActual = valor;
+  document.querySelectorAll('.subcat-chip').forEach(c => c.classList.remove('activo'));
+  elem.classList.add('activo');
+  aplicarFiltros();
+}
+
+function filtrarPorPersona(texto){
+  filtroPersonaActual = texto.trim().toLowerCase();
+  aplicarFiltros();
+}
+
+function aplicarFiltros(){
+  if(!categoriaActual) return;
+  const esCertCompetencias = (categoriaActual.codigo === '04-CERTIFICADOS-COMPETENCIAS');
+  
+  let docs = categoriaActual.documentos;
+  
+  // Filtro por equipo/subcategoría
+  if(filtroEquipoActual){
+    if(esCertCompetencias){
+      docs = docs.filter(d => d.equipo === filtroEquipoActual);
+    } else {
+      docs = docs.filter(d => d.subcategoria === filtroEquipoActual);
+    }
+  }
+  
+  // Filtro por persona (solo certificados)
+  if(esCertCompetencias && filtroPersonaActual){
+    docs = docs.filter(d => 
+      (d.persona || '').toLowerCase().includes(filtroPersonaActual) ||
+      d.nombre_actual.toLowerCase().includes(filtroPersonaActual)
+    );
+  }
+  
+  renderDocumentos(docs, esCertCompetencias);
+}
+
+function renderDocumentos(docs, esCertCompetencias){
+  const cont = document.getElementById('docLista');
+  const info = document.getElementById('docInfo');
+  
+  // Info contextual
+  let infoTxt = `<strong>${docs.length}</strong> documento${docs.length!==1?'s':''}`;
+  if(esCertCompetencias && filtroPersonaActual){
+    const personasUnicas = new Set(docs.map(d => d.persona).filter(p => p));
+    infoTxt += ` · <strong>${personasUnicas.size}</strong> persona${personasUnicas.size!==1?'s':''}`;
+  }
+  info.innerHTML = infoTxt;
+
+  if(docs.length === 0){
+    cont.innerHTML = `<div class="empty"><div class="empty-icon">📭</div><p>No hay documentos para mostrar.</p></div>`;
+    return;
+  }
+
+  // Caso especial: en certificados con búsqueda activa, agrupar por persona
+  if(esCertCompetencias && filtroPersonaActual){
+    const grupos = {};
+    docs.forEach(d => {
+      const persona = d.persona || '(Sin nombre)';
+      if(!grupos[persona]) grupos[persona] = [];
+      grupos[persona].push(d);
+    });
+    
+    cont.innerHTML = Object.keys(grupos).sort().map(persona => `
+      <div class="persona-grupo">
+        <div class="persona-header">👤 ${escapeHtml(persona)} · ${grupos[persona].length} certificado${grupos[persona].length!==1?'s':''}</div>
+        ${grupos[persona].map(d => itemHTML(d, esCertCompetencias)).join('')}
+      </div>
+    `).join('');
+    return;
+  }
+  
+  // Caso normal
+  cont.innerHTML = docs.map(d => itemHTML(d, esCertCompetencias)).join('');
+}
+
+function itemHTML(d, esCertCompetencias){
+  let metaExtra = '';
+  if(esCertCompetencias){
+    if(d.persona) metaExtra = `<span>👤 ${escapeHtml(d.persona)}</span>`;
+  }
+  return `
+    <a class="doc-item" href="${d.link}" target="_blank" rel="noopener">
+      <div class="doc-icono-pdf">PDF</div>
+      <div class="doc-info-bloque">
+        <div class="doc-nombre">${escapeHtml(d.nombre_actual)}</div>
+        <div class="doc-meta">
+          ${d.codigo_propuesto && !d.codigo_propuesto.includes('⚠') ? `<span class="doc-codigo">${d.codigo_propuesto}</span>` : ''}
+          <span>${escapeHtml(esCertCompetencias ? (d.equipo || '') : d.subcategoria)}</span>
+          ${metaExtra}
+          ${d.es_duplicado ? '<span class="doc-tag-dup">Duplicado</span>' : ''}
+        </div>
+      </div>
+      <div class="chevron">›</div>
+    </a>
+  `;
+}
+
+function buscar(texto){
+  texto = texto.trim().toLowerCase();
+  if(!texto){
+    if(modoActual === 'busqueda') renderHome();
+    return;
+  }
+
+  const resultados = [];
+  DATA.categorias.forEach(cat => {
+    cat.documentos.forEach(doc => {
+      const enNombre = doc.nombre_actual.toLowerCase().includes(texto);
+      const enCodigo = doc.codigo_propuesto.toLowerCase().includes(texto);
+      const enSubcat = (doc.subcategoria || '').toLowerCase().includes(texto);
+      const enPersona = (doc.persona || '').toLowerCase().includes(texto);
+      const enEquipo = (doc.equipo || '').toLowerCase().includes(texto);
+      if(enNombre || enCodigo || enSubcat || enPersona || enEquipo){
+        resultados.push({...doc, _categoria: cat.nombre, _esCert: cat.codigo === '04-CERTIFICADOS-COMPETENCIAS'});
+      }
+    });
+  });
+
+  modoActual = 'busqueda';
+  cambiarPantalla('scrBusqueda');
+  document.getElementById('btnBack').classList.add('visible');
+  document.getElementById('titulo').textContent = 'Resultados de búsqueda';
+  document.getElementById('subtitulo').textContent = `"${texto}"`;
+
+  document.getElementById('busqInfo').innerHTML = `<strong>${resultados.length}</strong> resultado${resultados.length!==1?'s':''}`;
+
+  const cont = document.getElementById('busqLista');
+  if(resultados.length === 0){
+    cont.innerHTML = `<div class="empty"><div class="empty-icon">🔍</div><p>No se encontraron documentos.</p><p style="font-size:11px;margin-top:6px">Prueba con otras palabras o un código.</p></div>`;
+    return;
+  }
+
+  cont.innerHTML = resultados.slice(0, 100).map(d => `
+    <a class="doc-item" href="${d.link}" target="_blank" rel="noopener">
+      <div class="doc-icono-pdf">PDF</div>
+      <div class="doc-info-bloque">
+        <div class="doc-nombre">${escapeHtml(d.nombre_actual)}</div>
+        <div class="doc-meta">
+          ${d.codigo_propuesto && !d.codigo_propuesto.includes('⚠') ? `<span class="doc-codigo">${d.codigo_propuesto}</span>` : ''}
+          <span>${escapeHtml(d._categoria)}</span>
+          ${d._esCert && d.persona ? `<span>👤 ${escapeHtml(d.persona)}</span>` : ''}
+          ${d._esCert && d.equipo ? `<span>${escapeHtml(d.equipo)}</span>` : `<span>${escapeHtml(d.subcategoria)}</span>`}
+          ${d.es_duplicado ? '<span class="doc-tag-dup">Duplicado</span>' : ''}
+        </div>
+      </div>
+      <div class="chevron">›</div>
+    </a>
+  `).join('') + (resultados.length > 100 ? `<div class="empty" style="padding:14px"><p style="font-size:11px">Mostrando primeros 100 de ${resultados.length}. Afina tu búsqueda.</p></div>` : '');
+}
+
+function volver(){
+  document.getElementById('buscador').value = '';
+  renderHome();
+}
+
+function cambiarPantalla(id){
+  document.querySelectorAll('.pantalla').forEach(p => p.classList.remove('activa'));
+  document.getElementById(id).classList.add('activa');
+  window.scrollTo(0, 0);
+}
+
+function escapeHtml(s){
+  return String(s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function escapeAttr(s){
+  return String(s||'').replace(/'/g,"\\'").replace(/"/g,'&quot;');
+}
+
+init();
+</script>
+</body>
+</html>
